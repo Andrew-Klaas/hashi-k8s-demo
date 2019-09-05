@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+  
+<div class="tile is-ancestor">
+  <div class="tile is-vertical is-parent">
+      <div class="columns is-mobile">
+          <div class="column is-one-quarter">
+	      <h1 class="title">Service Segmentation</h1>
+          </div>
+          <div class="column">
+	      <a id="btnConsulConnect" class="button is-warning" onClick="toggleConsulConnect()">Enable Consul Connect</a>
+	      <a class="button is-link" onClick="executeServiceCall()">Execute Service Call</a>
+          </div>
+          
+      </div>
+      <div class="field">
+	<div class="control">
+  		<input id="serviceURL" class="input" type="text" placeholder="URL" value="{{ serviceurl }}">
+	</div>
+     </div>
+     <div class="field">
+  	<label class="label">Service URL Result</label>
+  	<div class="control">
+    		<textarea id="serviceResult" class="textarea" placeholder="Service URL Result" style="height:190px">{{ urlresult }}</textarea>
+  	</div>
+     </div>
+  </div>
+</div>
+<label class="label">Packet Capture(s)</label>
+<div class="tabs is-fullwidth">
+        <ul>
+            <li class="is-active">
+               <a onclick="makeDirectActive()">
+ 		<span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+        	<span>Direct</span>
+		</a>
+            </li>
+            <li>
+               <a onclick="makeConsulActive()">
+ 		<span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+        	<span>Consul Connect Proxy</span>
+		</a>
+            </li>
+        </ul>
+  </div>
+	        <div id="tcpdumpdirect" class="column" style="height:300px;width:100%;overflow-x:autol ">
+			<iframe id="directshell" src="" width="100%" height="100%"></iframe>
+        	</div>
+	        <div id="tcpdumpconnect" class="column" style="height:300px;width:100%;overflow-x:auto;display: none; ">
+			<iframe id="connectshell" src="" width="100%" height="100%"></iframe>
+        	</div>
+
+<script>
+function prettyPrint() {
+    var ugly = "{{ urlresult }}";
+    var obj = JSON.parse(ugly);
+    var pretty = JSON.stringify(obj, undefined, 4);
+    document.getElementById('serviceResult').value = pretty;
+}
+
+
+function makeConsulActive() {
+
+   document.getElementById('tcpdumpconnect').style.display = "block";
+   document.getElementById('tcpdumpdirect').style.display = "none";
+
+}
+
+function makeDirectActive() {
+
+   document.getElementById('tcpdumpconnect').style.display = "none";
+   document.getElementById('tcpdumpdirect').style.display = "block";
+
+}
+
+function executeServiceCall(){
+    
+    //iframe  = document.getElementById("shell");
+    
+    //if (consulConnect == true)
+    //    iframe.src ="http://3.89.5.73:4200/tdump8443";
+    //else
+    //   iframe.src ="http://3.89.5.73:4200/tdump8080";
+
+    //Set the serviceurl parameter
+    serviceURL = document.getElementById('serviceURL').value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     ugly = JSON.parse(this.responseText);
+     pretty = JSON.stringify(ugly, undefined, 4);
+     document.getElementById("serviceResult").innerHTML = pretty;
+    }
+  };
+  xhttp.open("GET", "/serviceexecute?serviceurl="+serviceURL, true);
+  xhttp.send();
+
+} 
+
+var consulConnect = false;
+
+function toggleConsulConnect()
+{
+	if (consulConnect == false) {
+		document.getElementById('serviceURL').value="http://127.0.0.1:8181";
+		document.getElementById('btnConsulConnect').innerText="Disable Consul Connect";
+		consulConnect = true;
+	        return;
+	}
+
+	if (consulConnect == true) {
+		document.getElementById('serviceURL').value="{{ serviceurl }}";
+		document.getElementById('btnConsulConnect').innerText="Enable Consul Connect";
+                consulConnect = false;
+                return;
+	}
+}
+
+
+var directiframe  = document.getElementById("directshell");
+directiframe.src = "http://3.89.5.73:4200" + "/tdump8080";
+var connectiframe  = document.getElementById("connectshell");
+connectiframe.src = "http://3.89.5.73:4200" + "/tdump8443";
+
+</script>
+
+{% endblock %}

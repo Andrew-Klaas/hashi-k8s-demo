@@ -1,0 +1,9 @@
+gcp_region = "us-east1"
+gcp_zone = "us-east1-b"
+gcp_project = "your-project"
+cluster_name = "your-test-cluster"
+initial_node_count = 3
+master_username = "k8smaster"
+master_password = "YourSecretPassword"
+node_machine_type = "n1-standard-2"
+node_disk_size = "30"

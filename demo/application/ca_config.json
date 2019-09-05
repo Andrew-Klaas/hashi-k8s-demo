@@ -1,0 +1,9 @@
+{
+  "Provider": "consul",
+  "Config": {
+    "LeafCertTTL": "72h",
+    "PrivateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEArqiy1c3pbT3cSkjdEM1APALUareU...",
+    "RootCert": "-----BEGIN CERTIFICATE-----\nMIIDijCCAnKgAwIBAgIJAOFZ66em1qC7MA0GCSqGSIb3...",
+    "RotationPeriod": "2160h"
+  }
+}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+
+
+#termview {
+  background-color: #163B59
+}
+
+#dbuserview {
+  font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+  border: dotted white;
+  width: 100%;
+  
+}
+
+#dbuserview th {
+  padding: 8px;
+  border: 1px solid white;
+  
+}
+
+#dbuserview td {
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+
+#dbuserview tr:nth-child(even){background-color: #f2f2f2;}
+
+#dbuserview tr:hover {background-color: #ddd;}
+
+#dbuserview th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #163B59;
+  color: white;
+}
+</style>
+  <section>
+    <div class="container" style="overflow-x:auto">
+      <div class="tile is-ancestor">
+        <div class="tile is-vertical is-parent">
+          <div class="tile is-child box">
+            <p class="title">Database Users</p>
+            <p>SELECT DISTINCT User FROM mysql.user;</p>
+          </div>
+        </div>
+      </div>
+
+      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th>username</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in results %}
+          <tr>
+            <td>{{ record['username'] }}</td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}

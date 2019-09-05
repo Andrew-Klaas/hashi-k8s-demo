@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-transit-app
+  labels:
+    app: k8s-transit-app
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: k8s-transit-app
+  template:
+    metadata: 
+      name: k8s-transit-app
+      labels:
+        app: k8s-transit-app
+    spec:
+      serviceAccountName: vault-auth
+      automountServiceAccountToken: true
+      containers:
+        - name: k8s-transit-app
+          image: aklaas2/k8s-transit-app:latest
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          volumeMounts:
+          - name: config
+            mountPath: /usr/src/app/config
+      volumes:
+      - name: config
+        configMap:
+          name: config
+          items:
+          - key: config
+            path: config.ini
