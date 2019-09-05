@@ -13,7 +13,7 @@ provider "google" {
 resource "google_container_cluster" "k8sexample" {
   name               = "${var.cluster_name}"
   description        = "k8s demo cluster"
-  zone               = "${var.gcp_zone}"
+  location               = "${var.gcp_zone}"
   initial_node_count = "${var.initial_node_count}"
   enable_kubernetes_alpha = "true"
   enable_legacy_abac = "true"
