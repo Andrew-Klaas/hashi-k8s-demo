@@ -28,3 +28,13 @@ cat that script if you want to see how to deploy each of the above by hand/manua
 ```bash
 demo/cleanup.sh
 ```
+
+## UI
+Refresh your browser tab when they initally open up. They are started by nohup commands using kubectl port-forward. see demo/vault/vault.sh and demo/consul/consul.sh
+```bash
+#Consul
+http://localhost:8500
+
+#Vault
+http://localhost:8200
+```
