@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "google" {
-  //Use the credentials file or environment variables 
+  //Use the credentials file or environment variables
   //https://www.terraform.io/docs/providers/google/provider_reference.html
   //credentials = "${file("gcp-creds.json")}"
   project     = "${var.gcp_project}"
@@ -15,7 +15,6 @@ resource "google_container_cluster" "k8sexample" {
   description        = "k8s demo cluster"
   location               = "${var.gcp_zone}"
   initial_node_count = "${var.initial_node_count}"
-  enable_kubernetes_alpha = "true"
   enable_legacy_abac = "true"
 
   master_auth {
@@ -34,6 +33,3 @@ resource "google_container_cluster" "k8sexample" {
     ]
   }
 }
-
-
-

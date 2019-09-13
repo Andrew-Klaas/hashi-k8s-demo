@@ -5,7 +5,7 @@ set -v
 git clone https://github.com/hashicorp/vault-helm.git
 helm install  --name=vault -f ./values.yaml ./vault-helm
 
-sleep 20s
+sleep 30s
 
 nohup kubectl port-forward service/vault 8200:8200 --pod-running-timeout=1m &
 
