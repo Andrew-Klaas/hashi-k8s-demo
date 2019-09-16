@@ -1,9 +1,16 @@
 # k8s consul/vault/transit-app/mariadb demo
+Software requirements (on your laptop):
+
+```git curl jq kubectl helm consul vault```
 
 ## Setup
 0. Set your GCP creds. I've done mine via environment variables
 https://www.terraform.io/docs/providers/google/provider_reference.html
 
+If using TFE, use the GOOGLE_CREDENTIALS environment variable. Also the JSON credential data is required to all be on one line. Just modify in a text editor before adding to TFE.
+```bash
+GOOGLE_CREDENTIALS: {"type": "service_account","project_id": "klaas","private_key_id":.......... 
+````
 1. Fill out terraform.tfvars with your values
 
 2. plan/apply
