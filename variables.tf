@@ -39,5 +39,5 @@ variable "node_machine_type" {
 
 variable "node_disk_size" {
   description = "Node disk size in GB"
-  default = "20"
+  default = "30"
 }
