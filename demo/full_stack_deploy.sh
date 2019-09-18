@@ -5,13 +5,13 @@ cd tiller
 ./helm-init.sh
 cd ..
 
-sleep 30s
+sleep 60s
 
 cd consul
 ./consul.sh
 cd ..
 
-sleep 30s
+sleep 60s
 
 cd mariadb
 ./mariadb.sh
@@ -21,7 +21,7 @@ sleep 30s
 
 cd vault
 ./vault.sh
-sleep 30s
+sleep 60s
 ./vault_setup.sh
 sleep 30s
 cd ..
