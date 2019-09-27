@@ -17,7 +17,6 @@ spec:
       annotations:
        "consul.hashicorp.com/connect-inject": "true"
        "consul.hashicorp.com/connect-service-upstreams": "vault:8200,mariadb:3306"
-       "consul.hashicorp.com/connect-service-protocol": "sql"
     spec:
       serviceAccountName: vault-auth
       automountServiceAccountToken: true
