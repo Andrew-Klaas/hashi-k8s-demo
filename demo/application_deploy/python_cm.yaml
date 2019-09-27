@@ -7,7 +7,7 @@ data:
     LogLevel = DEBUG
 
     [DATABASE]
-    Address=mariadb.service.consul
+    Address=127.0.0.1
     Port=3306
     User=vaultadmin
     Password=vaultadminpassword
@@ -19,7 +19,7 @@ data:
     DynamicDBCredsPath=lob_a/workshop/database/creds/workshop-app
     Platform=kubernetes
     ProtectRecords=False
-    Address=http://vault.service.consul:8200
+    Address=http://127.0.0.1:8200
     Token=root
     KeyPath=lob_a/workshop/transit
     KeyName=customer-key
