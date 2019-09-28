@@ -19,13 +19,9 @@ data:
     {"consul": ["$(kubectl get svc consul-consul-dns -o jsonpath='{.spec.clusterIP}')"]}
 EOF
 
-sleep 30s
+sleep 20s
 
 nohup kubectl port-forward service/consul-consul-ui 8500:80 --pod-running-timeout=1m &
-
-consul intention create -replace -deny "*" "*"
-consul intention create -replace -allow k8s-transit-app vault
-consul intention create -replace -allow k8s-transit-app mariadb
 
 echo ""
 echo -n "Your Consul UI is at: http://localhost:8500"

@@ -9,6 +9,8 @@ sleep 60s
 
 cd consul
 ./consul.sh
+sleep 10s
+./intentions.sh
 cd ..
 
 sleep 60s
