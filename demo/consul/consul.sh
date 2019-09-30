@@ -1,4 +1,5 @@
 #!/bin/bash
+set -v
 
 echo "Installing Consul from Helm chart repo..."
 git clone https://github.com/hashicorp/consul-helm.git
