@@ -1,7 +1,7 @@
 # k8s consul/vault/transit-app/mariadb demo
 Software requirements (on your laptop):
 
-```git curl jq kubectl helm consul vault```
+```git curl jq kubectl helm(v2.14.3 or newer) consul vault```
 
 ## Setup
 0. Set your GCP creds. I've done mine via environment variables

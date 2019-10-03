@@ -19,7 +19,7 @@ cd mariadb
 ./mariadb.sh
 cd ..
 
-sleep 30s
+sleep 60s
 
 cd vault
 ./vault.sh

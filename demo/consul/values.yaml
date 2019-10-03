@@ -7,9 +7,6 @@ global:
   # value.
   enabled: true
 
-  # Domain to register the Consul DNS server to listen for.
-  domain: consul
-
   # Datacenter is the name of the datacenter that the agents should register
   # as. This shouldn't be changed once the Consul cluster is up and running
   # since Consul doesn't support an automatic way to change this value
