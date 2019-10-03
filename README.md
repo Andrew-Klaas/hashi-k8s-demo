@@ -45,3 +45,6 @@ http://localhost:8500
 #Vault
 http://localhost:8200
 ```
+
+## CONNECT
+use the "f-connect" branch to run this demo using Consul Connect.
