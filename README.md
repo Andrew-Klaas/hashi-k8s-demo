@@ -46,5 +46,5 @@ http://localhost:8500
 http://localhost:8200
 ```
 
-## CONNECT
+## Consul Connect
 use the "f-connect" branch to run this demo using Consul Connect.
