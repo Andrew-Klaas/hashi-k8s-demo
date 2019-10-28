@@ -5,22 +5,22 @@ cd tiller
 ./helm-init.sh
 cd ..
 
-#kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=helm -o name -n kube-system) -n kube-system
-sleep 60s
+kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=helm -o name -n kube-system) -n kube-system
+sleep 1s
 
 cd consul
 ./consul.sh
 cd ..
 
-#kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=consul -o name)
-sleep 60s
+kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=consul -o name)
+sleep 1s
 
 cd mariadb
 ./mariadb.sh
 cd ..
 
-#kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=mariadb -o name)
-sleep 60s
+kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=mariadb -o name)
+sleep 1s
 
 cd vault
 ./vault.sh
