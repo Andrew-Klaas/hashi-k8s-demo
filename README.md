@@ -1,7 +1,7 @@
 # k8s consul/vault/transit-app/mariadb demo
 Software requirements (on your laptop):
 
-```git curl jq kubectl helm(v2.14.3 or newer) consul vault```
+```git curl jq kubectl(v1.11 or greater) helm(v2.14.3 or greater) consul vault```
 
 ## Setup
 0. Set your GCP creds. I've done mine via environment variables
@@ -45,3 +45,6 @@ http://localhost:8500
 #Vault
 http://localhost:8200
 ```
+
+## Consul Connect
+use the "f-connect" branch to run this demo using Consul Connect.
