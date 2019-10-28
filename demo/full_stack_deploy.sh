@@ -26,7 +26,6 @@ cd vault
 ./vault.sh
 sleep 60s
 ./vault_setup.sh
-sleep 30s
 cd ..
 
 kubectl apply -f ./application_deploy
