@@ -10,12 +10,10 @@ sleep 1s
 
 cd consul
 ./consul.sh
-sleep 10s
-./intentions.sh
-cd ..
-
 kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=consul -o name)
 sleep 1s
+./intentions.sh
+cd ..
 
 cd mariadb
 ./mariadb.sh
