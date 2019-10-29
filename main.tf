@@ -10,6 +10,7 @@ provider "google" {
   region      = "${var.gcp_region}"
 }
 
+/*
 resource "google_container_cluster" "k8sexample" {
   name               = "${var.cluster_name}"
   description        = "k8s demo cluster"
@@ -31,5 +32,56 @@ resource "google_container_cluster" "k8sexample" {
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring"
     ]
+  }
+}
+*/
+
+resource "google_compute_instance" "mariadb" {
+  name         = "${var.cluster_name}-mariadb-vm"
+  machine_type = "n1-standard-1"
+  zone         = "${var.gcp_zone}"
+
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-1804-lts"
+    }
+  }
+  
+  // Local SSD disk
+  scratch_disk {
+  }
+
+  network_interface {
+    network = "default"
+
+    access_config {
+      // Ephemeral IP
+    }
+  }
+
+  //install mariadb, consul, envoy, etc.
+  metadata_startup_script = "echo hi > /test.txt"
+
+  metadata = {
+   ssh-keys = "${var.ssh_user}:${file("~/.ssh/id_rsa.pub")}"
+  }
+}
+
+resource "google_compute_firewall" "mariadb-firewalls" {
+  name    = "${var.cluster_name}-mariadb-vm-firewall-rules"
+  network = "default"
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+    ports    = ["5000"]
+  }
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "22", "5000", "21000-21255"]
   }
 }
