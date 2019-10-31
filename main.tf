@@ -10,11 +10,10 @@ provider "google" {
   region      = "${var.gcp_region}"
 }
 
-/*
 resource "google_container_cluster" "k8sexample" {
   name               = "${var.cluster_name}"
   description        = "k8s demo cluster"
-  location               = "${var.gcp_zone}"
+  location           = "${var.gcp_zone}"
   initial_node_count = "${var.initial_node_count}"
   enable_legacy_abac = "true"
 
@@ -34,7 +33,6 @@ resource "google_container_cluster" "k8sexample" {
     ]
   }
 }
-*/
 
 resource "google_compute_instance" "mariadb" {
   name         = "${var.cluster_name}-mariadb-vm"
@@ -60,16 +58,26 @@ resource "google_compute_instance" "mariadb" {
   }
 
   //install mariadb, consul, envoy, etc.
-  metadata_startup_script = "echo hi > /test.txt"
+  metadata_startup_script = "${data.template_file.mariadb-template.rendered}"
 
   metadata = {
    ssh-keys = "${var.ssh_user}:${file("~/.ssh/id_rsa.pub")}"
   }
 }
 
+data "template_file" "mariadb-template" {
+  template = "${file("${path.module}/init-mariadb.tpl")}"
+
+  vars = {
+    environment_name                 = "${var.cluster_name}"
+  }
+}
+
 resource "google_compute_firewall" "mariadb-firewalls" {
   name    = "${var.cluster_name}-mariadb-vm-firewall-rules"
   network = "default"
+  direction = "INGRESS"
+  source_ranges = ["0.0.0.0/0"]
 
   allow {
     protocol = "icmp"
@@ -82,6 +90,11 @@ resource "google_compute_firewall" "mariadb-firewalls" {
 
   allow {
     protocol = "tcp"
-    ports    = ["80", "22", "5000", "21000-21255"]
+    ports    = ["80", "22", "5000"]
+  }
+
+  allow { 
+    protocol = "tcp"
+    ports    = ["8500", "8501", "8600", "8502", "8301", "8302", "8300", "21000-21255" ]
   }
 }
