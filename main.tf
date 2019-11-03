@@ -85,12 +85,7 @@ resource "google_compute_firewall" "mariadb-firewalls" {
 
   allow {
     protocol = "tcp"
-    ports    = ["5000"]
-  }
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80", "22", "5000"]
+    ports    = ["80", "22", "3306", "5000"]
   }
 
   allow { 
