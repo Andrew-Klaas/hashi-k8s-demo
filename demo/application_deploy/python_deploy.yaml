@@ -16,7 +16,7 @@ spec:
         app: k8s-transit-app
       annotations:
        "consul.hashicorp.com/connect-inject": "true"
-       "consul.hashicorp.com/connect-service-upstreams": "vault:8200,mariadb:3306"
+       "consul.hashicorp.com/connect-service-upstreams": "vault:8200,mariadb:3306:dc2"
     spec:
       serviceAccountName: vault-auth
       automountServiceAccountToken: true
