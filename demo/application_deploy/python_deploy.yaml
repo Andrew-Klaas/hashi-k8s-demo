@@ -16,7 +16,7 @@ spec:
         app: k8s-transit-app
       annotations:
        "consul.hashicorp.com/connect-inject": "true"
-       "consul.hashicorp.com/connect-service-upstreams": "vault:8200,mariadb:3306:dc2"
+       "consul.hashicorp.com/connect-service-upstreams": "vault:8200,mariadb:3306"
     spec:
       serviceAccountName: vault-auth
       automountServiceAccountToken: true
@@ -29,6 +29,11 @@ spec:
           volumeMounts:
           - name: config
             mountPath: /usr/src/app/config
+#        - name: echo
+#          image: abrarov/tcp-echo
+#          args:
+#            - "--port"
+#            - "9090"
       volumes:
       - name: config
         configMap:

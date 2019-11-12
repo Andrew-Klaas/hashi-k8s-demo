@@ -1,7 +1,21 @@
 #!/bin/bash
 
 sudo apt-get -qq -y update
-sudo apt-get install -y wget unzip dnsutils ntp git dnsmasq-base dnsmasq telnet vim netcat jq
+sudo apt-get install -y wget unzip dnsutils ntp git dnsmasq-base dnsmasq telnet vim netcat jq docker.io
+sudo apt-get install -y \
+apt-transport-https \
+ca-certificates \
+curl \  
+gnupg-agent \
+software-properties-common
+apt-key fingerprint 6FF974DB
+curl -sL 'https://getenvoy.io/gpg' | sudo apt-key add -
+apt-key fingerprint 6FF974DB
+sudo add-apt-repository \
+"deb [arch=amd64] https://dl.bintray.com/tetrate/getenvoy-deb \
+$(lsb_release -cs) \
+stable"
+sudo apt-get update && sudo apt-get install -y getenvoy-envoy
 sudo systemctl start ntp.service
 sudo systemctl enable ntp.service
 echo "Disable reverse dns lookup in SSH"
@@ -57,9 +71,18 @@ sudo cat << EOF > /etc/consul.d/config.json
   "data_dir": "/opt/consul/data",
   "client_addr": "0.0.0.0",
   "log_level": "INFO",
-  "ui": true
+  "ui": true,
+  "connect": {
+    "enabled": true
+  },
+  "ports": {
+    "grpc": 8502
+  }
 }
 EOF
+
+
+
 
 sudo service consul start
 
@@ -77,7 +100,39 @@ sudo service mysql restart;
 
 
 #Mariadb Consul service
-echo '{"service": {"name": "mariadb", "tags": ["mariadb"], "port":3306}}' | sudo tee /etc/consul.d/mysql.json
+sudo cat << EOF > /etc/consul.d/mysql.hcl 
+service {
+  name = "mariadb"
+  tags = [ "mariadb" ]
+  port = 3306
+  connect {
+    sidecar_service {
+      proxy {
+        config {
+          protocol = "sql"
+        }
+      }
+    }
+  }
+}
+EOF
+
+sudo cat << EOF > /etc/consul.d/client_mysql.hcl
+services {
+  name = "client"
+  port = 9090
+  connect {
+    sidecar_service {
+      proxy {
+        upstreams {
+          destination_name = "mariadb"
+          local_bind_port = 9191
+        }
+      }
+    }
+  }
+}
+EOF
 
 sudo service consul restart
 
