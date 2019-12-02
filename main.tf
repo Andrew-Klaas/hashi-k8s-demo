@@ -90,6 +90,14 @@ resource "google_compute_firewall" "mariadb-firewalls" {
 
   allow { 
     protocol = "tcp"
-    ports    = ["8500", "8501", "8600", "8502", "8301", "8302", "8300", "21000-21255" ]
+    ports    = ["8500", "8501", "8600", "8502", "8301", "8302", "8300", "8000-8499", "19000-19005","21000-21255" ]
+    // internal network traffic envoy to consul
   }
+  
+  /*
+  allow {
+    protocol = "tcp"
+    ports = -1
+  }
+  */
 }

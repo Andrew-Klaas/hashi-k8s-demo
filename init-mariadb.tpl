@@ -1,4 +1,5 @@
 #!/bin/bash
+local_ipv4=$(curl -s -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/ip)
 
 sudo apt-get -qq -y update
 sudo apt-get install -y wget unzip dnsutils ntp git dnsmasq-base dnsmasq telnet vim netcat jq docker.io
@@ -37,7 +38,7 @@ sudo systemctl restart dnsmasq
 
 echo "Installing Consul..."
 cd /tmp
-CONSUL_VERSION="1.6.1"
+CONSUL_VERSION="1.6.2"
 sudo curl https://releases.hashicorp.com/consul/$${CONSUL_VERSION}/consul_$${CONSUL_VERSION}_linux_amd64.zip -o consul.zip
 sudo unzip consul.zip
 
@@ -65,9 +66,11 @@ sudo cat << EOF > /etc/consul.d/config.json
 {
   "server": true,
   "datacenter": "dc2",
+  "primary_datacenter": "dc1",
   "bootstrap_expect": 1,
   "leave_on_terminate": true,
-  "advertise_addr": "$(/sbin/ifconfig ens5 | grep 'inet ' | awk '{print substr($2,1)}')",
+  "enable_central_service_config": true,
+  "advertise_addr": "$${local_ipv4}",
   "data_dir": "/opt/consul/data",
   "client_addr": "0.0.0.0",
   "log_level": "INFO",
@@ -80,9 +83,6 @@ sudo cat << EOF > /etc/consul.d/config.json
   }
 }
 EOF
-
-
-
 
 sudo service consul start
 
@@ -108,8 +108,11 @@ service {
   connect {
     sidecar_service {
       proxy {
+        mesh_gateway {
+          mode = "local"
+        }
         config {
-          protocol = "sql"
+          protocol = "tcp"
         }
       }
     }
@@ -127,6 +130,7 @@ services {
         upstreams {
           destination_name = "mariadb"
           local_bind_port = 9191
+          datacenter = "dc2"
         }
       }
     }
@@ -134,6 +138,57 @@ services {
 }
 EOF
 
+sudo cat << EOF > /etc/consul.d/socat.hcl
+{
+  "service": {
+    "name": "socat",
+    "port": 8181,
+    "connect": { "sidecar_service": {} }
+  }
+}
+EOF
+
 sudo service consul restart
 
+sleep 5s
+
+nohup consul connect envoy --sidecar-for mariadb &
+
+nohup consul connect envoy -mesh-gateway -register \
+                 -service "gateway-secondary" \
+                 -address $${local_ipv4}:8443 \
+                 -wan-address $${local_ipv4}:8443 \
+                 -bind-address "public=$${local_ipv4}:8443" \
+                 -admin-bind 127.0.0.1:19001 &
+
+exit 0
+###########
+# DELETE
+###########
 #Connect Install
+apt-get install -y mariadb-server  curl netcat-openbsd netcat
+
+wget https://releases.hashicorp.com/vault/1.2.4/vault_1.2.4_linux_amd64.zip
+unzip vault_1.2.4_linux_amd64.zip
+mv vault /usr/bin/vault
+wget https://releases.hashicorp.com/consul/1.6.2/consul_1.6.2_linux_amd64.zip
+unzip consul_1.6.2_linux_amd64.zip 
+mv consul /usr/bin/consul
+
+# fix vault
+# run Proxy
+consul connect envoy -mesh-gateway -register \
+                    -service "gateway-secondary" \
+                    -address "10.128.0.2:9443" \
+                    -wan-address "10.128.0.2:9443" \
+                    -admin-bind 127.0.0.1:19005 
+
+consul connect envoy -mesh-gateway -register \
+                 -service "gateway-secondary" \
+                 -address 10.128.0.8:8443 \
+                 -wan-address 10.128.0.8:8443 \
+                 -bind-address "public=10.128.0.8:8443" \
+                 -admin-bind 127.0.0.1:19001
+
+
+consul config write proxy-defaults.json
