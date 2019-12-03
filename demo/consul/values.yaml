@@ -192,7 +192,8 @@ meshGateway:
     enabled: true
 
     # Type of service, ex. LoadBalancer, ClusterIP.
-    type: LoadBalancer
+    #type: LoadBalancer
+    type: NodePort
 
     # Port that the service will be exposed on.
     # The targetPort will be set to meshGateway.containerPort.
@@ -237,6 +238,7 @@ meshGateway:
   # If there are no connect-enabled services running, then the gateway
   # will fail health checks. You may disable health checks as a temporary
   # workaround.
+  #enableHealthChecks: true
   enableHealthChecks: false
 
   resources: |

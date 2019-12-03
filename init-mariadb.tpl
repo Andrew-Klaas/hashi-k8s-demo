@@ -120,34 +120,6 @@ service {
 }
 EOF
 
-sudo cat << EOF > /etc/consul.d/client_mysql.hcl
-services {
-  name = "client"
-  port = 9090
-  connect {
-    sidecar_service {
-      proxy {
-        upstreams {
-          destination_name = "mariadb"
-          local_bind_port = 9191
-          datacenter = "dc2"
-        }
-      }
-    }
-  }
-}
-EOF
-
-sudo cat << EOF > /etc/consul.d/socat.hcl
-{
-  "service": {
-    "name": "socat",
-    "port": 8181,
-    "connect": { "sidecar_service": {} }
-  }
-}
-EOF
-
 sudo service consul restart
 
 sleep 5s
@@ -161,31 +133,4 @@ nohup consul connect envoy -mesh-gateway -register \
   -bind-address "public=$${local_ipv4}:8443" \
   -admin-bind 127.0.0.1:19001 &
 
-
 exit 0
-
-
-###########
-# DELETE
-###########
-#Connect Install
-apt-get install -y mariadb-server  curl netcat-openbsd netcat
-
-wget https://releases.hashicorp.com/vault/1.2.4/vault_1.2.4_linux_amd64.zip
-unzip vault_1.2.4_linux_amd64.zip
-mv vault /usr/bin/vault
-wget https://releases.hashicorp.com/consul/1.6.2/consul_1.6.2_linux_amd64.zip
-unzip consul_1.6.2_linux_amd64.zip 
-mv consul /usr/bin/consul
-
-# fix vault
-# run Proxy
-nohup consul connect envoy -mesh-gateway -register \
-  -service "gateway-secondary" \
-  -address 10.128.0.8:8443 \
-  -wan-address 10.128.0.8:8443 \
-  -bind-address "public=10.128.0.8:8443" \
-  -admin-bind 127.0.0.1:19001 &
-
-
-consul config write proxy-defaults.json
