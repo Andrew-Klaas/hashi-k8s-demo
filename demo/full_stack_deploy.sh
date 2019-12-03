@@ -3,7 +3,7 @@ set -v
 
 if [ -z "$1" ]
   then
-    echo "Please provide private_ip from terraform output. This is the "DC2" VM private IP"
+    echo "Please provide private_ip from terraform output. This is the DC2 VM private IP"
     exit 0
 fi
 
