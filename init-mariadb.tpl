@@ -155,13 +155,16 @@ sleep 5s
 nohup consul connect envoy --sidecar-for mariadb &
 
 nohup consul connect envoy -mesh-gateway -register \
-                 -service "gateway-secondary" \
-                 -address $${local_ipv4}:8443 \
-                 -wan-address $${local_ipv4}:8443 \
-                 -bind-address "public=$${local_ipv4}:8443" \
-                 -admin-bind 127.0.0.1:19001 &
+  -service "gateway-secondary" \
+  -address $${local_ipv4}:8443 \
+  -wan-address $${local_ipv4}:8443 \
+  -bind-address "public=$${local_ipv4}:8443" \
+  -admin-bind 127.0.0.1:19001 &
+
 
 exit 0
+
+
 ###########
 # DELETE
 ###########
@@ -177,18 +180,12 @@ mv consul /usr/bin/consul
 
 # fix vault
 # run Proxy
-consul connect envoy -mesh-gateway -register \
-                    -service "gateway-secondary" \
-                    -address "10.128.0.2:9443" \
-                    -wan-address "10.128.0.2:9443" \
-                    -admin-bind 127.0.0.1:19005 
-
-consul connect envoy -mesh-gateway -register \
-                 -service "gateway-secondary" \
-                 -address 10.128.0.8:8443 \
-                 -wan-address 10.128.0.8:8443 \
-                 -bind-address "public=10.128.0.8:8443" \
-                 -admin-bind 127.0.0.1:19001
+nohup consul connect envoy -mesh-gateway -register \
+  -service "gateway-secondary" \
+  -address 10.128.0.8:8443 \
+  -wan-address 10.128.0.8:8443 \
+  -bind-address "public=10.128.0.8:8443" \
+  -admin-bind 127.0.0.1:19001 &
 
 
 consul config write proxy-defaults.json
