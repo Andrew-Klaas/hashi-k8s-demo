@@ -46,7 +46,9 @@ resource "google_compute_instance" "mariadb" {
   }
   
   // Local SSD disk
+  // Local SSD disk
   scratch_disk {
+    interface = "SCSI"
   }
 
   network_interface {
