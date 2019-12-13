@@ -7,4 +7,5 @@ master_username = "k8smaster"
 master_password = "YourSecretPassword"
 node_machine_type = "n1-standard-2"
 node_disk_size = "30"
-ssh_user = ""
+//The username for your SSH key, see the mariadb instance in main.tf
+ssh_user = "johndoe"
