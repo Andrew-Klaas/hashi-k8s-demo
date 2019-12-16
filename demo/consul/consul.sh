@@ -22,7 +22,7 @@ EOF
 
 sleep 20s
 
-nohup kubectl port-forward service/consul-consul-ui 8500:80 --pod-running-timeout=1m &
+nohup kubectl port-forward service/consul-consul-ui --address 0.0.0.0 8500:80 --pod-running-timeout=1m &
 
 echo ""
 echo -n "Your Consul UI is at: http://localhost:8500"

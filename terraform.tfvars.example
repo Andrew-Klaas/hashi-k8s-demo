@@ -1,5 +1,5 @@
-gcp_region = "us-east1"
-gcp_zone = "us-east1-b"
+gcp_region = "us-central1"
+gcp_zone = "us-central1-c"
 gcp_project = "your-project"
 cluster_name = "your-test-cluster"
 initial_node_count = 3

@@ -7,7 +7,7 @@ helm install  --name=vault -f ./values.yaml ./vault-helm
 
 sleep 30s
 
-nohup kubectl port-forward service/vault 8200:8200 --pod-running-timeout=1m &
+nohup kubectl port-forward service/vault --address 0.0.0.0 8200:8200 --pod-running-timeout=1m &
 
 echo ""
 echo -n "Your Vault UI is at: http://localhost:8200"

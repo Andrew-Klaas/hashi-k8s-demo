@@ -1,0 +1,95 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$script = <<SCRIPT
+echo "Installing Docker..."
+sudo apt-get update
+sudo apt-get remove docker docker-engine docker.io
+echo '* libraries/restart-without-asking boolean true' | sudo debconf-set-selections
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common -y
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg |  sudo apt-key add -
+sudo apt-key fingerprint 0EBFCD88
+sudo add-apt-repository \
+      "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) \
+      stable"
+sudo apt-get update
+sudo apt-get install -y docker-ce
+# Restart docker to make sure we get the latest version of the daemon if there is an upgrade
+sudo service docker restart
+# Make sure we can actually use docker as the vagrant user
+sudo usermod -aG docker vagrant
+sudo docker --version
+
+sudo apt-get install unzip curl vim jq golang go-dep git -y
+
+# Add the Cloud SDK distribution URI as a package source
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+# Import the Google Cloud Platform public key
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+# Update the package list and install the Cloud SDK
+sudo apt-get update -y && sudo apt-get install -y google-cloud-sdk
+
+#kubectl
+sudo apt-get update && sudo apt-get install -y apt-transport-https
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubectl
+
+cd /tmp/
+
+#helm
+wget https://get.helm.sh/helm-v2.16.0-rc.2-linux-amd64.tar.gz 
+tar -zxvf helm-v2.16.0-rc.2-linux-amd64.tar.gz  
+sudo mv /tmp/linux-amd64/helm /usr/bin/helm
+
+echo "Installing Terraform..."
+TERRAFORM_VERSION=0.12.18
+curl -sSL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform.zip
+unzip /tmp/terraform.zip
+sudo install terraform /usr/bin/terraform
+
+echo "Installing Consul..."
+CONSUL_VERSION=1.6.2
+curl -sSL https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip > consul.zip
+unzip /tmp/consul.zip
+sudo install consul /usr/bin/consul
+
+echo "Installing Vault.."
+VAULT_VERSION=1.3.0
+curl -sSL https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip > vault.zip
+unzip /tmp/vault.zip
+sudo install vault /usr/bin/vault
+
+
+SCRIPT
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "bento/ubuntu-18.04" # 18.04 LTS
+  config.vm.hostname = "admin"
+  config.vm.provision "shell", inline: $script, privileged: false
+
+ config.vm.synced_folder ".", "/vagrant/"
+
+
+  config.vm.network "forwarded_port", guest: 8500, host: 8500, auto_correct: true
+  config.vm.network "forwarded_port", guest: 8200, host: 8200, auto_correct: true
+
+  # Increase memory for Parallels Desktop
+  config.vm.provider "parallels" do |p, o|
+    p.memory = "1024"
+  end
+
+  # Increase memory for Virtualbox
+  config.vm.provider "virtualbox" do |vb|
+        vb.memory = "1024"
+  end
+
+  # Increase memory for VMware
+  ["vmware_fusion", "vmware_workstation"].each do |p|
+    config.vm.provider p do |v|
+      v.vmx["memsize"] = "1024"
+    end
+  end
+end
