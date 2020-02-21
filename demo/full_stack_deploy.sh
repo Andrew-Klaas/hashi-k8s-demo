@@ -1,12 +1,14 @@
 #!/bin/bash
 set -v
 
-cd tiller
-./helm-init.sh
-cd ..
-
-kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=helm -o name -n kube-system) -n kube-system
-sleep 1s
+# Not required in Helm3 (Required for Helm2)
+#cd tiller
+#./helm-init.sh
+#cd ..
+#kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=helm -o name -n kube-system) -n kube-system
+#sleep 1s
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo update
 
 cd consul
 ./consul.sh
