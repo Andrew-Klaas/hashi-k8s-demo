@@ -21,6 +21,7 @@ spec:
       
           [DATABASE]
           Address=mariadb.service.consul 
+          Port=3306
           {{ with secret "lob_a/workshop/database/creds/workshop-app" -}}
           User={{ .Data.username }}
           Password={{ .Data.password }}
