@@ -12,6 +12,8 @@ spec:
   template:
     metadata: 
       annotations:
+        consul.hashicorp.com/connect-inject: "true"
+        consul.hashicorp.com/connect-service-upstreams: "vault:8200,mariadb:3306"
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-status: "update"
         vault.hashicorp.com/agent-inject-secret-config.ini: "lob_a/workshop/database/roles/workshop-app"
@@ -20,7 +22,7 @@ spec:
           LogLevel = DEBUG
       
           [DATABASE]
-          Address=mariadb-default.service.consul 
+          Address=localhost
           Port=3306
           {{ with secret "lob_a/workshop/database/creds/workshop-app" -}}
           User={{ .Data.username }}
