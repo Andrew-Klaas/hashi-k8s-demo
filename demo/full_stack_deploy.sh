@@ -13,14 +13,12 @@ helm repo update
 cd consul
 ./consul.sh
 cd ..
-
 kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=consul -o name)
 sleep 1s
 
 cd mariadb
 ./mariadb.sh
 cd ..
-
 kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=mariadb -o name)
 sleep 1s
 
@@ -30,7 +28,7 @@ sleep 60s
 ./vault_setup.sh
 cd ..
 
-kubectl apply -f ./application_deploy
+kubectl apply -f ./application_deploy_sidecar
 kubectl get svc k8s-transit-app
 
 echo ""

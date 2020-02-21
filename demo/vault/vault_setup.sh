@@ -43,7 +43,7 @@ vault write lob_a/workshop/kv/transit-app-example username=vaultadmin password=v
 # Configure our secret engine
 vault write lob_a/workshop/database/config/ws-mysql-database \
     plugin_name=mysql-database-plugin \
-    connection_url="{{username}}:{{password}}@tcp(mariadb.service.consul:3306)/" \
+    connection_url="{{username}}:{{password}}@tcp(mariadb-default.service.consul:3306)/" \
     allowed_roles="workshop-app" \
     username="root" \
     password="vaultadminpassword"
