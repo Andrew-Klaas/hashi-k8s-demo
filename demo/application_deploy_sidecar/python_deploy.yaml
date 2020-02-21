@@ -22,7 +22,7 @@ spec:
           LogLevel = DEBUG
       
           [DATABASE]
-          Address=localhost
+          Address=127.0.0.1
           Port=3306
           {{ with secret "lob_a/workshop/database/creds/workshop-app" -}}
           User={{ .Data.username }}
@@ -36,7 +36,7 @@ spec:
           DynamicDBCredsPath=lob_a/workshop/database/creds/workshop-app
           Platform=kubernetes
           ProtectRecords=False
-          Address=http://vault-default.service.consul:8200
+          Address=http://127.0.0.1:8200
           Token=root
           KeyPath=lob_a/workshop/transit
           KeyName=customer-key

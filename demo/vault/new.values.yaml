@@ -193,7 +193,8 @@ server:
   # Extra annotations to attach to the server pods
   # This should be a multi-line string mapping directly to the a map of
   # the annotations to apply to the server pods
-  annotations: {}
+  annotations: |
+    "consul.hashicorp.com/connect-inject": "true"
 
   # Enables a headless service to be used by the Vault Statefulset
   service:

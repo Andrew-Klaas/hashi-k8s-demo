@@ -24,9 +24,10 @@ sleep 1s
 
 cd vault
 ./vault.sh
-sleep 60s
+sleep 30s
 ./vault_setup.sh
 cd ..
+sleep 5s
 
 kubectl apply -f ./application_deploy_sidecar
 kubectl get svc k8s-transit-app
