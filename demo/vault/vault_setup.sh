@@ -1,6 +1,8 @@
 #!/bin/bash
 set -v
 
+nohup kubectl port-forward service/consul-consul-ui 8500:80 --pod-running-timeout=10m &
+
 export VAULT_ADDR=http://127.0.0.1:8200
 export CONSUL_ADDR=http://127.0.0.1:8500
 
