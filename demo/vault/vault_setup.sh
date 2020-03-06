@@ -1,6 +1,6 @@
 #!/bin/bash
-set -v
 
+nohup kubectl port-forward service/vault 8200:8200 --pod-running-timeout=10m &
 nohup kubectl port-forward service/consul-consul-ui 8500:80 --pod-running-timeout=10m &
 
 export VAULT_ADDR=http://127.0.0.1:8200
@@ -45,7 +45,7 @@ vault write lob_a/workshop/kv/transit-app-example username=vaultadmin password=v
 # Configure our secret engine
 vault write lob_a/workshop/database/config/ws-mysql-database \
     plugin_name=mysql-database-plugin \
-    connection_url="{{username}}:{{password}}@tcp(mariadb-default.service.consul:3306)/" \
+    connection_url="{{username}}:{{password}}@tcp(mariadb.service.consul:3306)/" \
     allowed_roles="workshop-app" \
     username="root" \
     password="vaultadminpassword"

@@ -2,8 +2,10 @@
 set -v
 
 echo "Installing Consul from Helm chart repo..."
+rm -rf ./consul-helm
 git clone https://github.com/hashicorp/consul-helm.git
-helm install consul -f ./new.values.yaml ./consul-helm
+cd consul-helm; git checkout a70e71ea57f65d32ab725db573a7c159b37fb7cd ; cd ..
+helm install consul -f ./values.yaml ./consul-helm
 
 sleep 10s
 

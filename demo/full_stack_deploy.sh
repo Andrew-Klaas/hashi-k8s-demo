@@ -1,12 +1,7 @@
 #!/bin/bash
 set -v
 
-# Not required in Helm3 (Required for Helm2)
-#cd tiller
-#./helm-init.sh
-#cd ..
-#kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=helm -o name -n kube-system) -n kube-system
-#sleep 1s
+#REQUIRES HELM 3
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 helm repo update
 
@@ -24,7 +19,7 @@ sleep 1s
 
 cd vault
 ./vault.sh
-sleep 30s
+sleep 5s
 ./vault_setup.sh
 cd ..
 sleep 5s
