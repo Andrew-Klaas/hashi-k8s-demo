@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-transit-app
+  labels:
+    app: k8s-transit-app
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: k8s-transit-app
+  template:
+    metadata: 
+      annotations:
+        consul.hashicorp.com/connect-inject: "true"
+        consul.hashicorp.com/connect-service-upstreams: "vault:8200,mariadb:3306"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-inject-secret-config.ini: "lob_a/workshop/database/roles/workshop-app"
+        vault.hashicorp.com/agent-inject-template-config.ini: |
+          [DEFAULT]
+          LogLevel = DEBUG
+      
+          [DATABASE]
+          Address=127.0.0.1
+          Port=3306
+          {{ with secret "lob_a/workshop/database/creds/workshop-app" -}}
+          User={{ .Data.username }}
+          Password={{ .Data.password }}
+          {{- end }}
+          Database=app
+      
+          [VAULT]
+          Enabled=True
+          DynamicDBCreds=False
+          DynamicDBCredsPath=lob_a/workshop/database/creds/workshop-app
+          Platform=kubernetes
+          ProtectRecords=False
+          Address=http://127.0.0.1:8200
+          Token=root
+          KeyPath=lob_a/workshop/transit
+          KeyName=customer-key
+      
+          [CONSUL]
+          DEBUG=False
+        vault.hashicorp.com/role: "example"
+      name: k8s-transit-app
+      labels:
+        app: k8s-transit-app
+    spec:
+      serviceAccountName: vault-auth
+      automountServiceAccountToken: true
+      containers:
+        - name: k8s-transit-app
+          image: aklaas2/k8s-transit-app-sidecar:latest
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          volumeMounts:
+          - name: config
+            mountPath: /usr/src/app/config
+      volumes:
+      - name: config
+        configMap:
+          name: config
+          items:
+          - key: config
+            path: config.ini

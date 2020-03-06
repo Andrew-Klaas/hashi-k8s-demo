@@ -64,7 +64,7 @@ def get_datacenter_info(location,target):
 
 def read_config():
   conf = configparser.ConfigParser()
-  with open('./config/config.ini') as f:
+  with open('/vault/secrets/config.ini') as f:
     conf.read_file(f)
   return conf
 
