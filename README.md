@@ -1,7 +1,7 @@
 # k8s consul/vault/transit-app/mariadb demo
 Software requirements (on your laptop):
 
-```git curl jq kubectl(v1.11 or greater) helm3 consul vault```
+```git curl jq kubectl(v1.17 or greater) helm3 consul vault```
 
 ## Setup
 0. Set your GCP creds. I've done mine via environment variables
@@ -18,9 +18,9 @@ GOOGLE_CREDENTIALS: {"type": "service_account","project_id": "klaas","private_ke
 terraform apply --auto-approve;
 ```
 
-3. Go into GCP console and copy the command for  "connecting" to your k8s cluster.
+3. Go into GCP console and copy the command for  "connecting" to your k8s cluster. The command should be in your terraform output.
 ```bash
-gcloud container clusters get-credentials your-k8s-cluster --zone us-east1-b --project your_project
+gcloud container clusters get-credentials your-cluster-name --zone us-central1-c --project your-project
 ```
 
 4. Deploy Consul/Vault/Mariadb/Python-transit-app. This takes a minute or two as there are a bunch of sleeps setup in the script.
@@ -46,5 +46,11 @@ http://localhost:8500
 http://localhost:8200
 ```
 
-## Consul Connect
-use the "f-connect" branch to run this demo using Consul Connect.
+## Encryption as a service demo
+Use the following command to access the application. Use port 5000.
+```bash
+$ kubectl get svc k8s-transit-app
+NAME              TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+k8s-transit-app   LoadBalancer   10.15.250.236   <pending>     5000:30549/TCP   11s
+
+```
