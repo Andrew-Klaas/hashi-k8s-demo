@@ -18,7 +18,7 @@ GOOGLE_CREDENTIALS: {"type": "service_account","project_id": "klaas","private_ke
 terraform apply --auto-approve;
 ```
 
-3. Go into GCP console and copy the command for  "connecting" to your k8s cluster. The command should be in your terraform output.
+3. Copy the command for  "connecting" to your k8s cluster from the terraform output.
 ```bash
 gcloud container clusters get-credentials your-cluster-name --zone us-central1-c --project your-project
 ```
