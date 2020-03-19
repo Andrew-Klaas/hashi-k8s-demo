@@ -1,0 +1,11 @@
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: consul-k8s-transit-app-mapping
+spec:
+  prefix: /
+  service: k8s-transit-app
+  resolver: consul-dc1
+  load_balancer:
+    policy: round_robin
