@@ -5,7 +5,7 @@ metadata:
   labels:
     app: k8s-transit-app
 spec:
-  replicas: 1
+  replicas: 3
   selector: 
     matchLabels:
       app: k8s-transit-app
