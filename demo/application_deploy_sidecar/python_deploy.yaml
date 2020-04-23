@@ -5,7 +5,7 @@ metadata:
   labels:
     app: k8s-transit-app
 spec:
-  replicas: 3
+  replicas: 1
   selector: 
     matchLabels:
       app: k8s-transit-app
@@ -32,11 +32,11 @@ spec:
       
           [VAULT]
           Enabled=True
-          DynamicDBCreds=False
+          DynamicDBCreds=True
           DynamicDBCredsPath=lob_a/workshop/database/creds/workshop-app
           Platform=kubernetes
           ProtectRecords=False
-          Address=http://127.0.0.1:8200
+          Address=http://vault.service.consul:8200
           Token=root
           KeyPath=lob_a/workshop/transit
           KeyName=customer-key
@@ -52,7 +52,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: k8s-transit-app
-          image: aklaas2/k8s-transit-app-sidecar:latest
+          image: aklaas2/k8s-transit-app-transform:latest
           ports:
           - containerPort: 5000
             protocol: TCP

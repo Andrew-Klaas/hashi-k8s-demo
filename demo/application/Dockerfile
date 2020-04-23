@@ -1,6 +1,9 @@
 FROM python:3
 
-RUN apt update && apt install -y shellinabox tcpdump && pip3 install Flask mysql-connector-python hvac requests
+RUN apt update && apt install -y shellinabox tcpdump && pip3 install Flask mysql-connector-python requests
+RUN pip install --upgrade pip
+RUN pip install hvac
+RUN pip3 install hvac
 
 WORKDIR /usr/src/app
 ADD templates ./templates/

@@ -1,6 +1,13 @@
 #!/bin/bash
 set -v
 
+if [ -z "$1" ]
+  then
+    echo "Please provide Your Vault Enterprise License File"
+    exit 0
+fi
+LICENSE=$(cat $1)
+
 #REQUIRES HELM 3
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 helm repo update
@@ -20,7 +27,7 @@ sleep 1s
 cd vault
 ./vault.sh
 sleep 5s
-./vault_setup.sh
+./vault_setup.sh $LICENSE
 cd ..
 sleep 5s
 
