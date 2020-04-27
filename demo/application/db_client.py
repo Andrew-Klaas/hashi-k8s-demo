@@ -98,7 +98,7 @@ class DbClient:
                 name = self.key_name,
                 plaintext = base64.b64encode(value.encode()).decode('ascii')
             )
-            logger.debug('Response: {}'.format(response))
+            #logger.debug('Response: {}'.format(response))
             return response['data']['ciphertext']
         except Exception as e:
             logger.error('There was an error encrypting the data: {}'.format(e))
@@ -106,7 +106,7 @@ class DbClient:
     # The data returned from Transit is base64 encoded so we decode it before returning
     def decrypt(self, value):
         # support unencrypted messages on first read
-        logger.debug('Decrypting {}'.format(value))
+        #logger.debug('Decrypting {}'.format(value))
         if not value.startswith('vault:v'):
             return value
         else: 
@@ -116,15 +116,46 @@ class DbClient:
                     name = self.key_name,
                     ciphertext = value
                 )
-                logger.debug('Response: {}'.format(response))
+                #logger.debug('Response: {}'.format(response))
                 plaintext = response['data']['plaintext']
-                logger.debug('Plaintext (base64 encoded): {}'.format(plaintext))
+                #logger.debug('Plaintext (base64 encoded): {}'.format(plaintext))
                 decoded = base64.b64decode(plaintext).decode()
-                logger.debug('Decoded: {}'.format(decoded))
+                #logger.debug('Decoded: {}'.format(decoded))
                 return decoded
             except Exception as e:
                 logger.error('There was an error encrypting the data: {}'.format(e))
     
+    def encode_transform(self, input_value):
+        logger.debug('Transform encoding value: {}'.format(input_value))
+        try:
+            role_name = 'ssns'
+            transformation_name = 'ssn-fpe'
+            
+            response = self.vault_client.secrets.transform.encode(
+                role_name=role_name,
+                value=input_value, 
+                transformation=transformation_name,
+            )
+            print('The encoded value is: %s' % response['data']['encoded_value'])
+            logger.debug('encoded: {}'.format(response['data']['encoded_value']))
+            return response['data']['encoded_value']
+        except Exception as e:
+            logger.error('There was an error encoding (transform) the data: {}'.format(e))           
+
+    def decode_transform(self, input_value):
+        logger.debug('Transform decoding value: {}'.format(input_value))
+        try:
+            response = self.vault_client.secrets.transform.decode(
+                role_name="ssns",
+                value=input_value,
+            )
+            print('The decoded value is: %s' % response['data']['decoded_value'])
+            decoded = response['data']['decoded_value']
+            return decoded
+        except Exception as e:
+            logger.error('There was an error decoding (transform) the data: {}'.format(e))
+
+
     # Long running apps may expire the DB connection
     def _execute_sql(self,sql,cursor):
         try:
@@ -170,7 +201,7 @@ class DbClient:
                 r['salary'] = row[7]
                 if self.vault_client is not None and not raw:
                     r['birth_date'] = self.decrypt(r['birth_date'])
-                    r['ssn'] = self.decrypt(r['ssn'])
+                    r['ssn'] = self.decode_transform(r['ssn'])
                     r['address'] = self.decrypt(r['address'])
                     r['salary'] = self.decrypt(r['salary'])
                 results.append(r)
@@ -196,7 +227,7 @@ class DbClient:
                 r['salary'] = row[7]
                 if self.vault_client is not None:
                     r['birth_date'] = self.decrypt(r['birth_date'])
-                    r['ssn'] = self.decrypt(r['ssn'])
+                    r['ssn'] = self.decode_transform(r['ssn'])
                     r['address'] = self.decrypt(r['address'])
                     r['salary'] = self.decrypt(r['salary'])
                 results.append(r)
@@ -226,7 +257,7 @@ class DbClient:
                             VALUES  ("{}", "{}", "{}", "{}", "{}", "{}", "{}");'''.format(record['birth_date'], record['first_name'], record['last_name'], record['create_date'], record['ssn'], record['address'], record['salary'] )
         else:
             statement = '''INSERT INTO `customers` (`birth_date`, `first_name`, `last_name`, `create_date`, `social_security_number`, `address`, `salary`) 
-                            VALUES  ("{}", "{}", "{}", "{}", "{}", "{}", "{}");'''.format(self.encrypt(record['birth_date']), record['first_name'], record['last_name'], record['create_date'], self.encrypt(record['ssn']), self.encrypt(record['address']), self.encrypt(record['salary']) )
+                            VALUES  ("{}", "{}", "{}", "{}", "{}", "{}", "{}");'''.format(self.encrypt(record['birth_date']), record['first_name'], record['last_name'], record['create_date'], self.encode_transform(record['ssn']), self.encrypt(record['address']), self.encrypt(record['salary']) )
         logger.debug('SQL Statement: {}'.format(statement))
         cursor = self.conn.cursor()
         self._execute_sql(statement, cursor)
@@ -241,7 +272,7 @@ class DbClient:
         else:
             statement = '''UPDATE `customers`  
                        SET birth_date = "{}", first_name = "{}", last_name = "{}", social_security_number = "{}", address = "{}", salary = "{}"
-                       WHERE cust_no = {};'''.format(self.encrypt(record['birth_date']), record['first_name'], record['last_name'], self.encrypt(record['ssn']), self.encrypt(record['address']), self.encrypt(record['salary']), record['cust_no'] )
+                       WHERE cust_no = {};'''.format(self.encrypt(record['birth_date']), record['first_name'], record['last_name'], self.encode_transform(record['ssn']), self.encrypt(record['address']), self.encrypt(record['salary']), record['cust_no'] )
         logger.debug('Sql Statement: {}'.format(statement))
         cursor = self.conn.cursor()
         self._execute_sql(statement, cursor)
