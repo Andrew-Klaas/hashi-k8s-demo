@@ -567,6 +567,7 @@ connectInject:
   # Requires consul-k8s >= 0.10.1.
   enabled: true
   image: null # image for consul-k8s that contains the injector
+  #imageEnvoy: nicholasjackson/consul-envoy:v1.7.0-v0.12.2
   default: false # true will inject by default, otherwise requires annotation
 
   # imageConsul and imageEnvoy can be set to Docker images for Consul and

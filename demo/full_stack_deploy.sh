@@ -15,13 +15,13 @@ helm repo update
 cd consul
 ./consul.sh
 cd ..
-kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=consul -o name)
+kubectl wait --timeout=180s --for=condition=Ready $(kubectl get pod --selector=app=consul -o name)
 sleep 1s
 
 cd mariadb
 ./mariadb.sh
 cd ..
-kubectl wait --timeout=120s --for=condition=Ready $(kubectl get pod --selector=app=mariadb -o name)
+kubectl wait --timeout=180s --for=condition=Ready $(kubectl get pod --selector=app=mariadb -o name)
 sleep 1s
 
 cd vault

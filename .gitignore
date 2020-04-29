@@ -7,3 +7,4 @@ demo/consul/consul-helm/
 demo/consul/nohup.out
 demo/vault/nohup.out
 demo/vault/vault-helm/
+*.hclic
