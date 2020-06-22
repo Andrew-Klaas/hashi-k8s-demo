@@ -26,6 +26,11 @@ sleep 10s
 
 nohup kubectl port-forward service/consul-consul-ui 8500:80 --pod-running-timeout=10m &
 
+kubectl wait --timeout=180s --for=condition=Ready $(kubectl get pod --selector=app=consul -o name)
+
+sleep 10s
+
+#Configure ingress gateway to transit/transform app
 consul config write k8s-transit-app.hcl
 
 echo ""
