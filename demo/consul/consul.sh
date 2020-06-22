@@ -4,7 +4,7 @@ set -v
 echo "Installing Consul from Helm chart repo..."
 rm -rf ./consul-helm
 git clone https://github.com/hashicorp/consul-helm.git
-cd consul-helm; git checkout a70e71ea57f65d32ab725db573a7c159b37fb7cd ; cd ..
+cd consul-helm; git checkout master ; cd ..
 helm install consul -f ./values.yaml ./consul-helm
 
 sleep 10s
@@ -25,6 +25,8 @@ EOF
 sleep 10s
 
 nohup kubectl port-forward service/consul-consul-ui 8500:80 --pod-running-timeout=10m &
+
+consul config write k8s-transit-app.hcl
 
 echo ""
 echo -n "Your Consul UI is at: http://localhost:8500"
