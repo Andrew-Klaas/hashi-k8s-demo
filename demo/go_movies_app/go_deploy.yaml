@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-movies-app
+  labels:
+    app: go-movies-app
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: go-movies-app
+  template:
+    metadata: 
+      annotations:
+        consul.hashicorp.com/connect-inject: "true"
+        consul.hashicorp.com/connect-service-upstreams: "vault:8200, pq-postgresql-default:5432"
+      name: go-movies-app
+      labels:
+        app: go-movies-app
+    spec:
+      #fix: go-movies-app
+      serviceAccountName: vault-auth
+      automountServiceAccountToken: true
+      containers:
+        - name: go-movies-app
+          image: aklaas2/go-movies-app:latest
+          ports:
+          - containerPort: 8080
+            protocol: TCP

@@ -10,6 +10,8 @@ LICENSE=$(cat $1)
 
 #REQUIRES HELM 3
 helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo add hashicorp https://helm.releases.hashicorp.com
+helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 
 cd consul
@@ -23,6 +25,13 @@ cd mariadb
 cd ..
 kubectl wait --timeout=180s --for=condition=Ready $(kubectl get pod --selector=app=mariadb -o name)
 sleep 1s
+
+cd postgresql
+./postgresql.sh
+cd ..
+kubectl wait --timeout=180s --for=condition=Ready $(kubectl get pod --selector=app=pq -o name)
+sleep 1s
+
 
 cd vault
 ./vault.sh
