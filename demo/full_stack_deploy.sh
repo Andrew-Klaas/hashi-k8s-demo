@@ -32,7 +32,6 @@ cd ..
 kubectl wait --timeout=180s --for=condition=Ready $(kubectl get pod --selector=app=pq -o name)
 sleep 1s
 
-
 cd vault
 ./vault.sh
 sleep 5s
@@ -42,6 +41,9 @@ sleep 5s
 
 kubectl apply -f ./application_deploy_sidecar
 kubectl get svc k8s-transit-app
+
+kubectl apply -f ./go_movies_app
+kubectl get svc go-movies-app
 
 echo ""
 echo "use the following command to get your demo IP, port is 5000"

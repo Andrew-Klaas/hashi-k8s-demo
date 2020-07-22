@@ -125,12 +125,12 @@ replication:
 
 ## PostgreSQL user (has superuser privileges if username is `postgres`)
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
-postgresqlUsername: postgres
+postgresqlUsername: "postgres"
 
 ## PostgreSQL password
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
 ##
-# postgresqlPassword:
+postgresqlPassword: "password"
 
 ## PostgreSQL password using existing secret
 ## existingSecret: secret
@@ -141,7 +141,7 @@ postgresqlUsername: postgres
 ## Create a database
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#creating-a-database-on-first-run
 ##
-# postgresqlDatabase:
+postgresqlDatabase: movies
 
 ## PostgreSQL data dir
 ## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md

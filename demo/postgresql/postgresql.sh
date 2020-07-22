@@ -1,3 +1,5 @@
 #!/bin/bash
 
-helm install pq bitnami/postgresql -f values.yaml
+helm install pq \
+  --set postgresqlPassword=password,postgresqlDatabase=movies \
+    bitnami/postgresql -f values.yaml
