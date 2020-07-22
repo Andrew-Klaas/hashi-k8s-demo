@@ -24,7 +24,7 @@ nohup kubectl port-forward service/consul-consul-ui 8500:80 --pod-running-timeou
 sleep 1s
 
 #Configure ingress gateway to transit/transform app
-consul config write k8s-transit-app.hcl
+consul config write ingress.hcl
 
 echo ""
 echo -n "Your Consul UI is at: http://localhost:8500"

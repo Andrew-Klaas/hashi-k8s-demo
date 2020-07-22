@@ -1130,6 +1130,8 @@ ingressGateways:
       ports:
         - port: 5000
           nodePort: null
+        - port: 8080
+          nodePort: null
 
       # Annotations to apply to the ingress gateway service. Annotations defined
       # here will be applied to all ingress gateway services in addition to any
