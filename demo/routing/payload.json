@@ -1,5 +1,0 @@
-{
-  "Target": "web",
-  "ClientCertURI": "spiffe://953edf7e-5390-cb61-77c3-185ff115134c.consul/ns/default/dc/dc1/svc/emojify-ingress",
-  "ClientCertSerial": "1d"
-}

@@ -12,7 +12,7 @@ Listeners = [
   },
   {
     Port = 8080
-    Protocol = "tcp"
+    Protocol = "http"
     Services = [
       {
         Name = "go-movies-app"

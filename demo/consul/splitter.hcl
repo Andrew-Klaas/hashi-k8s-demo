@@ -1,12 +1,12 @@
 kind = "service-splitter"
-name = "emojify-website"
+name = "go-movies-app"
 splits = [
   {
-    weight         = 10
+    weight         = 50
     service_subset = "v1"
   },
   {
-    weight         = 90
+    weight         = 50
     service_subset = "v2"
   },
 ]

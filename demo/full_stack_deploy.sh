@@ -42,7 +42,11 @@ sleep 5s
 kubectl apply -f ./application_deploy_sidecar
 kubectl get svc k8s-transit-app
 
+# kubectl apply -f ./go_movies_app/go_deploy_v1.yaml
+# kubectl apply -f ./go_movies_app/go_svc.yaml
+#kubectl apply -f ./go_movies_app/go_deploy_v2.yaml
 kubectl apply -f ./go_movies_app
+
 kubectl get svc go-movies-app
 
 echo ""
