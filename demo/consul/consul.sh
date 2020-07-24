@@ -24,7 +24,7 @@ nohup kubectl port-forward service/consul-consul-ui 8500:80 --pod-running-timeou
 sleep 1s
 
 #Configure ingress gateway to transit/transform app
-consul config write ingress.hcl
+# consul config write ingress.hcl
 # consul config write router.hcl
 # consul config write splitter.hcl
 # consul config write resolver.hcl
