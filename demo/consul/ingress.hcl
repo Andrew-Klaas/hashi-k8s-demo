@@ -9,5 +9,14 @@ Listeners = [
         Name = "k8s-transit-app"
       }
     ]
+  },
+  {
+    Port = 8080
+    Protocol = "http"
+    Services = [
+      {
+        Name = "go-movies-app"
+      }
+    ]
   }
 ]

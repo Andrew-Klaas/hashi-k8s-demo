@@ -1,11 +1,7 @@
 #!/bin/bash
 set -v
 
-# Clone the repo
-rm -rf ./vault-helm
-git clone https://github.com/hashicorp/vault-helm.git
-cd vault-helm; git checkout 9d92922c9dc1500642278b172a7150c32534de0b; cd ..
-helm install vault -f ./values.yaml ./vault-helm
+helm install vault hashicorp/vault -f values.yaml  --version=0.6.0
 
 sleep 60s
 
