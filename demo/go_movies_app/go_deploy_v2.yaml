@@ -17,7 +17,7 @@ spec:
         consul.hashicorp.com/connect-inject: "true"
         consul.hashicorp.com/connect-service-protocol: "http"
         "consul.hashicorp.com/service-tags": "v2"
-        consul.hashicorp.com/connect-service-upstreams: "vault:8200, pq-postgresql:5432"
+        consul.hashicorp.com/connect-service-upstreams: "vault:8200, pq-postgresql:5432, go-movies-favorites-app:8081"
       name: go-movies-app
       labels:
         app: go-movies-app

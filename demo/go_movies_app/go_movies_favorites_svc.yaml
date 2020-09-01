@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: go-movies-favorites-app
+spec:
+  selector:
+    app: go-movies-favorites-app
+    version: v1
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 8081
+  type: LoadBalancer
