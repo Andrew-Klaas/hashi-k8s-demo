@@ -24,9 +24,6 @@ vault operator unseal $(cget unseal-key)
 export ROOT_TOKEN=$(cget root-token)
 vault login $ROOT_TOKEN
 
-#write license for ADP module
-vault write sys/license text=$1
-
 
 #Create admin user
 echo '
@@ -74,13 +71,13 @@ vault write -f lob_a/workshop/transit/keys/customer-key
 vault write -f lob_a/workshop/transit/keys/archive-key
 
 #transform
-vault secrets enable transform
-vault write transform/role/ssns transformations=ssn-fpe
-vault write transform/transformation/ssn-fpe \
-  type=fpe \
-  template=builtin/socialsecuritynumber \
-  tweak_source=internal \
-  allowed_roles=ssns
+# vault secrets enable transform
+# vault write transform/role/ssns transformations=ssn-fpe
+# vault write transform/transformation/ssn-fpe \
+#   type=fpe \
+#   template=builtin/socialsecuritynumber \
+#   tweak_source=internal \
+#   allowed_roles=ssns
 
 #ciphertext=$(vault write transform/encode/ssns value=123456789)
 #vault write transform/decode/ssns value=$ciphertext
