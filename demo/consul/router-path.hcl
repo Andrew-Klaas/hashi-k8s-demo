@@ -1,5 +1,5 @@
 Kind = "service-router"
-Name = "go-movies-app"
+Name = "go-movies-app-path"
 Routes = [
   {
     Match {
@@ -23,5 +23,4 @@ Routes = [
       ServiceSubset = "v2"
     }
   },
-  # NOTE: a default catch-all will send unmatched traffic to "web"
 ]

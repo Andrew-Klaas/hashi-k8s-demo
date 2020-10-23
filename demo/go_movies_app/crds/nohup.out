@@ -1,0 +1,31 @@
+Forwarding from 127.0.0.1:8200 -> 8200
+Forwarding from [::1]:8200 -> 8200
+Forwarding from 127.0.0.1:8500 -> 8500
+Forwarding from [::1]:8500 -> 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+Handling connection for 8500
+E1019 13:09:32.081448   31389 portforward.go:233] lost connection to pod
+E1019 13:09:33.143328   31388 portforward.go:233] lost connection to pod

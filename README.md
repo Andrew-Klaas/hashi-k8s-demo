@@ -54,3 +54,18 @@ NAME              TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          
 k8s-transit-app   LoadBalancer   10.15.250.236   <pending>     5000:30549/TCP   11s
 
 ```
+
+## Go Movies App Demo 
+Blog post: [Medium.com link]
+Use the following command to access the application. Use port 8080.
+```bash
+$ kubectl get svc go-movies-app
+NAME              TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+go-movies-app   LoadBalancer   10.15.250.237   <pending>     8080:30539/TCP   11s
+
+```
+
+
+
+## Consul Ingress Gateway
+The ingress gateway can be used to access either the k8s-transit-app (Vault features) or go-movies-app (Consul L7 features)

@@ -1,3 +1,10 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: go-movies-favorites-app
+automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +23,7 @@ spec:
       annotations:
         consul.hashicorp.com/connect-inject: "true"
         consul.hashicorp.com/connect-service-protocol: "http"
-        "consul.hashicorp.com/service-tags": "v1"
+        consul.hashicorp.com/service-tags: "v1"
       name: go-movies-favorites-app
       labels:
         app: go-movies-favorites-app
@@ -30,4 +37,3 @@ spec:
           image: aklaas2/go-movies-favorites-app:latest
           ports:
           - containerPort: 8081
-            protocol: TCP

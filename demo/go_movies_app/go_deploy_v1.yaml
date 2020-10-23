@@ -1,3 +1,10 @@
+---
+  apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: go-movies-app
+  automountServiceAccountToken: true
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,8 +23,8 @@ spec:
       annotations:
         consul.hashicorp.com/connect-inject: "true"
         consul.hashicorp.com/connect-service-protocol: "http"
-        "consul.hashicorp.com/service-tags": "v1"
-        consul.hashicorp.com/connect-service-upstreams: "vault:8200, pq-postgresql:5432, go-movies-favorites-app:8081"
+        consul.hashicorp.com/service-tags: "v1"
+        consul.hashicorp.com/connect-service-upstreams: "go-movies-favorites-app:8081, vault:8200, pq-postgresql:5432"
       name: go-movies-app
       labels:
         app: go-movies-app
