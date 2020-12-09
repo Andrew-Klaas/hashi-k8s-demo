@@ -32,10 +32,10 @@ sleep 5s
 kubectl apply -f ./application_deploy_sidecar
 kubectl get svc k8s-transit-app
 
-# kubectl apply -f ./go_movies_app
-# kubectl get svc go-movies-app
+kubectl apply -f ./go_movies_app
+kubectl get svc go-movies-app
 
-# kubectl wait --timeout=180s --for=condition=Ready $(kubectl get pod --selector=app=go-movies-app -o name)
+kubectl wait --timeout=180s --for=condition=Ready $(kubectl get pod --selector=app=go-movies-app -o name)
 
 consul config write consul/ingress.hcl
 consul config write consul/resolver.hcl
