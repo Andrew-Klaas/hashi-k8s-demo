@@ -32,7 +32,7 @@ spec:
       
           [VAULT]
           Enabled=True
-          DynamicDBCreds=false
+          DynamicDBCreds=True
           DynamicDBCredsPath=lob_a/workshop/database/creds/workshop-app
           Platform=kubernetes
           ProtectRecords=False
